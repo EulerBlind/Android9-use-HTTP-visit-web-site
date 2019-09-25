@@ -14,15 +14,15 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,29 +45,23 @@ public class MainActivity extends AppCompatActivity {
         Thread thread = new Thread() {
             @Override
             public void run() {
-
-                HttpGet httpGet = new HttpGet("http://47.9.94.151");
-                Log.i("http", httpGet.getMethod());
-                Log.i("http", httpGet.toString());
-                Log.i("http", String.valueOf(httpGet.hashCode()));
-                Log.i("http", String.valueOf(httpGet.getParams()));
+                OkHttpClient client = new OkHttpClient();
+                Request request = new Request.Builder()
+                        .get()
+                        .url("http:www.baidu.com")
+                        .build();
+                Call call = client.newCall(request);
                 try {
-                    HttpResponse httpResponse = new DefaultHttpClient().execute(httpGet);
-                    Log.i("http-", httpResponse.toString());
-                    InputStream inputStream = httpResponse.getEntity().getContent();
-//                    Log.i("http-", String.valueOf(httpResponse.getEntity().getContent()));
-                    StringBuilder sb = new StringBuilder();
-                    String line;
+                    Response response = call.execute();
 
-                    BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-                    while ((line = br.readLine()) != null) {
-                        sb.append(line);
-                    }
-                    String str = sb.toString();
-                    Log.i("http-", str);
+                    Log.i("http-", response.toString());
+                    assert response.body() != null;
+                    String body = response.body().string();
+//
+                    Log.i("http-", body);
+
 
                 } catch (IOException e) {
-                    Log.e("http", "error");
                     e.printStackTrace();
                 }
             }

@@ -19,3 +19,14 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+
+
+#-keep class org.apache.http.** { *; }
+#-keep class org.apache.commons.codec.** { *; }
+#-keep class org.apache.commons.logging.** { *; }
+#-keep class android.net.compatibility.** { *; }
+#-keep class android.net.http.** { *; }
+#-keep class com.android.internal.http.multipart.** { *; }
+#-dontwarn org.apache.http.**
+#-dontwarn android.webkit.**
